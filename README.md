@@ -23,9 +23,22 @@ if you want to install Ubuntu on a Mac(2019) in dual-boot mode, follow the steps
 ```
 sudo apt update && sudo apt install ibus-mozc
 ```
-10. If Wi-Fi, keyboard, or touchpad do not work, download t2_linux.sh and run:
+10. If Wi-Fi, keyboard, or touchpad do not work, run the following command and the restart:
 ```
-bash path/to/t2_linux.sh
+# GPG 鍵の取得と登録
+curl -s --compressed "https://adityagarg8.github.io/t2-ubuntu-repo/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg >/dev/null
+
+# リポジトリ定義ファイルを取得
+sudo curl -s --compressed -o /etc/apt/sources.list.d/t2.list "https://adityagarg8.github.io/t2-ubuntu-repo/t2.list"
+
+# noble（24.04）用リリースリポジトリを追加
+CODENAME=noble
+echo "deb [signed-by=/etc/apt/trusted.gpg.d/t2-ubuntu-repo.gpg] https://github.com/AdityaGarg8/t2-ubuntu-repo/releases/download/${CODENAME} ./" | sudo tee -a /etc/apt/sources.list.d/t2.list
+
+# 更新
+sudo apt update
+
+# カーネルのインストール
+sudo apt install linux-t2
 ```
-11. Restart
-12. Installation complete!
+11. Installation complete!
